@@ -28,9 +28,10 @@ test:
 build:
   extends: .kaniko
   rules:
-    - if: $CI_COMMIT_BRANCH="master" == "master"
+    - if: $CI_COMMIT_TAG
   variables:
     IMAGE_NAME: matrix-alertmanager-forwarder
+    IMAGE_TAG: $CI_COMMIT_TAG
     REGISTRY_URL: 'docker.io/zl0i/alertmanager-matrix-forwarder'
     REGISTRY_HOST: 'docker.io'
     REGISTRY_USER: '${DOCKERHUB_USER}'
