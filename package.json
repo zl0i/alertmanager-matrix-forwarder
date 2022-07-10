@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node_modules/.bin/nodemon src/app.js localhost 3000",
     "test": "mocha tests/ --require ts-node/register tests/*.test.ts",
-    "start": "node src/app.js"
+    "start": "ts-node src/app.ts"
   },
   "repository": {
     "type": "git",
