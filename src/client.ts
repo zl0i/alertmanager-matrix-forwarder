@@ -1,10 +1,11 @@
-import { createClient, MatrixClient } from 'matrix-js-sdk';
+import * as sdk from 'matrix-js-sdk';
 import striptags from 'striptags';
 
 let joinedRoomsCache = [];
-let connection: MatrixClient;
+let connection: sdk.MatrixClient = undefined
 
 const client = {
+  connection,
   ensureInRoom: async function (roomId) {
     if (joinedRoomsCache.indexOf(roomId === -1)) {
       try {
@@ -19,12 +20,9 @@ const client = {
   },
   init: async function () {
     // Init Matrix client
-    connection = createClient({
-      baseUrl: process.env['MATRIX_HOMESERVER_URL'],
-      accessToken: process.env['MATRIX_TOKEN'],
-      userId: process.env['MATRIX_USER'],
-      localTimeoutMs: 30000,
-    });
+    this.connection = sdk.createClient(process.env['MATRIX_HOMESERVER_URL']);
+    await this.connection.login("m.login.password", { "user": process.env['MATRIX_USER'], "password": process.env['MATRIX_PASSWORD'] })
+    await this.connection.startClient({})
 
     // Ensure in right rooms
     const rooms = await this.connection.getJoinedRooms();
