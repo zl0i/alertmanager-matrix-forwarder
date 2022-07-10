@@ -1,0 +1,37 @@
+include:
+  - project: 'zl0i/gitlab-ci-template'
+    ref: main
+    file: 'build.template.yaml'
+  - template: Code-Quality.gitlab-ci.yml
+
+stages:
+  - test
+  - build
+
+code_quality:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+test:
+  image: node:16.13.2-alpine
+  cache:
+    key:
+      files:
+        - package.json
+    paths:
+      - node_modules/
+  before_script:
+    - npm ci
+  script:
+    - npm run test
+
+build:
+  extends: .kaniko
+  rules:
+    - if: $CI_COMMIT_BRANCH="master" == "master"
+  variables:
+    IMAGE_NAME: matrix-alertmanager-forwarder
+    REGISTRY_URL: 'docker.io/zl0i/alertmanager-matrix-forwarder'
+    REGISTRY_HOST: 'docker.io'
+    REGISTRY_USER: '${DOCKERHUB_USER}'
+    REGISTRY_PASSWORD: '${DOCKERHUB_PASSWORD}'
