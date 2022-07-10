@@ -1,4 +1,4 @@
-const fixtures = {
+export default {
     alerts: {
         'receiver': 'receiver1',
         'status': 'firing',
@@ -50,4 +50,3 @@ const fixtures = {
     }
 }
 
-module.exports = fixtures
