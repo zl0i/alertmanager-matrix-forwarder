@@ -9,7 +9,7 @@ const client = {
   ensureInRoom: async function (roomId) {
     if (joinedRoomsCache.indexOf(roomId === -1)) {
       try {
-        const room = await connection.joinRoom(roomId);
+        const room = await this.connection.joinRoom(roomId);
         if (room) {
           joinedRoomsCache.push(room.roomId);
         }
@@ -20,9 +20,19 @@ const client = {
   },
   init: async function () {
     // Init Matrix client
-    this.connection = sdk.createClient(process.env['MATRIX_HOMESERVER_URL']);
-    await this.connection.login("m.login.password", { "user": process.env['MATRIX_USER'], "password": process.env['MATRIX_PASSWORD'] })
-    await this.connection.startClient({})
+    const client = sdk.createClient(process.env['MATRIX_HOMESERVER_URL']);
+
+    await client.login("m.login.password", { "user": process.env['MATRIX_USER'], "password": process.env['MATRIX_PASSWORD'] })
+
+    const token = client.getAccessToken()
+
+    this.connection = sdk.createClient({
+      baseUrl: process.env['MATRIX_HOMESERVER_URL'],
+      accessToken: token,
+      userId: process.env['MATRIX_USER']
+      // roomConfigs
+    })
+
 
     // Ensure in right rooms
     const rooms = await this.connection.getJoinedRooms();
@@ -36,7 +46,7 @@ const client = {
     });
   },
   sendAlert: async function (roomId, alert) {
-    await this.ensureInRoom(roomId);
+    // await this.ensureInRoom(roomId);
     return this.connection.sendEvent(
       roomId,
       'm.room.message',
