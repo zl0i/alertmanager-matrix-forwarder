@@ -15,7 +15,7 @@ app.use('/', router)
 client.init().then(() => {
     // eslint-disable-next-line no-console
     console.log('matrix-alertmanager initialized and ready')
-    app.listen(process.env.APP_PORT, () => {
+    app.listen(Number(process.env.APP_PORT), () => {
         // eslint-disable-next-line no-console
         console.log(`Server listening on ${process.env.APP_PORT} port`)
     })
