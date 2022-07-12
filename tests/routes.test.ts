@@ -5,27 +5,14 @@ const client = require('../src/client').default;
 import fixtures from './fixtures';
 import * as routes from '../src/routes';
 import * as utils from '../src/utils';
+import AlertService from '../src/service';
 
 const expect = chai.expect;
 require('dotenv').config({ path: '.env.default' });
 
-describe('routes', function () {
+describe('service', function () {
 
-  describe('getRoot', function () {
-    it('waves', function () {
-      let req = {};
-      let res = {
-        send: sinon.spy(),
-      };
-      routes.getRoot(req, res);
-
-      expect(res.send.calledOnce).to.be.true;
-      expect(res.send.firstCall.args[0]).to.equal('Hey 👋');
-    });
-  });
-
-  describe('postAlerts', function () {
-    // before(async () => {
+  describe('sendAlerts', function () {
     const clientStub = sinon.stub(client, 'sendAlert').returns(true);
     const req = {
       body: fixtures.alerts,
@@ -33,21 +20,16 @@ describe('routes', function () {
         secret: process.env.APP_ALERTMANAGER_SECRET,
       },
     };
-    const res = {
-      json: sinon.spy(),
-    };
-    // });
 
-    it('calls client sendAlert for each alert', () => {
-      routes.postAlerts(req, res);
-
+    it('calls client sendAlert for each alert', async () => {
+      await AlertService.sendAlers(req.body)
       expect(clientStub.calledTwice).to.be.true;
     });
 
-    it('calls parseAlerts', () => {
+    it('calls parseAlerts', async () => {
       const parseStub = sinon.stub(utils, 'parseAlerts').returns([]);
 
-      routes.postAlerts(req, res);
+      await AlertService.sendAlers(req.body)
 
       expect(parseStub.calledOnce).to.be.true;
       expect(parseStub.firstCall.args[0]).to.eql(fixtures.alerts);
@@ -56,10 +38,9 @@ describe('routes', function () {
     });
 
     it('returns ok', async () => {
-      await routes.postAlerts(req, res);
+      const result = await AlertService.sendAlers(req.body)
 
-      expect(res.json.calledOnce).to.be.true;
-      expect(res.json.firstCall.args[0]).to.eql({ result: 'ok' });
+      expect(result).to.eql({ result: 'ok' });
     });
 
     afterEach(() => {

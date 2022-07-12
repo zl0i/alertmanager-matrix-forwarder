@@ -1,18 +1,17 @@
-import express, { json } from 'express'
+import express from 'express'
 import client from './client'
-import { getRoot, postAlerts } from './routes'
+import router from './routes'
 
-// Config
 require('dotenv').config()
 
-// App
-const app = express()
-app.use(json({ limit: 1048576 })) // 1MiB
-// Routes
-app.get('/', getRoot)
-app.post('/alerts', postAlerts)
 
-// Initialize Matrix client
+const app = express()
+app.use(express.json({ limit: 1048576 }))
+
+//routers
+app.use('/', router)
+
+
 client.init().then(() => {
     // eslint-disable-next-line no-console
     console.log('matrix-alertmanager initialized and ready')
