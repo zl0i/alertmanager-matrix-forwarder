@@ -11,13 +11,16 @@ app.use(express.json({ limit: 1048576 }))
 //routers
 app.use('/', router)
 
+const port = Number(process.env.APP_PORT ?? 3000)
+console.log(port)
+console.log(process.env)
 
 client.init().then(() => {
     // eslint-disable-next-line no-console
     console.log('matrix-alertmanager initialized and ready')
-    app.listen(Number(process.env.APP_PORT), () => {
+    app.listen(port, () => {
         // eslint-disable-next-line no-console
-        console.log(`Server listening on ${process.env.APP_PORT} port`)
+        console.log(`Server listening on ${port} port`)
     })
 }).catch(e => {
     // eslint-disable-next-line no-console
