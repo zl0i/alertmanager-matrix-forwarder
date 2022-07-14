@@ -1,9 +1,8 @@
 
 
-export function getRoomForReceiver(receiver) {
+export function getRoomForReceiver(receiver: string) {
     /*
     Get the right roomId for the given receiver from MATRIX_ROOMS configuration item.
-
     For is <receiver/roomId> separated by pipe for multiple receiver/rooms.
      */
     const roomConfigs = (process.env.MATRIX_ROOMS as string).split('|')
@@ -31,6 +30,8 @@ export function formatAlert(data) {
         }
         let color = (function (severity) {
             switch (severity) {
+                case 'critical':
+                    return '#dc3545'; // red
                 case 'warning':
                     return '#ffc107'; // orange
                 case 'none':
@@ -39,9 +40,9 @@ export function formatAlert(data) {
                     return '#dc3545'; // red
             }
         })(data.labels.severity);
-        parts.push('<strong><font color=\"' + color + '\">FIRING:</font></strong>')
+        parts.push('<strong>🔥<font color=\"' + color + '\">FIRING:</font></strong>')
     } else if (data.status === 'resolved') {
-        parts.push('<strong><font color=\"#33cc33\">RESOLVED:</font></strong>')
+        parts.push('<strong>✅<font color=\"#33cc33\">RESOLVED:</font></strong>')
     } else {
         parts.push(data.status.toUpperCase() + ':')
     }
@@ -66,6 +67,19 @@ export function formatAlert(data) {
     if (data.annotations.description !== undefined) {
         parts.push('<br>', data.annotations.description)
     }
+
+    if (data.labels.severity === 'critical') {
+        parts.push('<br><b>Severity: <font color="#dc3545">critical</font></b>')
+    } else if (data.labels.severity === 'warning') {
+        parts.push('<br><b>Severity: <font color="#ffc107">warning</font></b>')
+    }
+
+    const convertstartsAt = new Date(data.startsAt)
+    parts.push('<br><b>Started: </b>', convertstartsAt.toLocaleString("en-US"))
+
+    const convertendsAt = new Date(data.endsAt)
+    parts.push('<br><b>Ends: </b>', convertendsAt.toLocaleString("en-US"))
+
     parts.push('<br><a href="', data.generatorURL, '">Alert link</a>')
 
     return parts.join(' ')
