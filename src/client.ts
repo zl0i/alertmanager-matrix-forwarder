@@ -1,52 +1,58 @@
-import * as sdk from 'matrix-js-sdk';
+import * as matrix from 'matrix-js-sdk';
 import striptags from 'striptags';
 
-let joinedRoomsCache = [];
-let connection: sdk.MatrixClient = undefined
+const MATRIX_SERVER = process.env['MATRIX_HOMESERVER_URL']
+const MATRIX_USER = process.env['MATRIX_USER']
+const MATRIX_PASSWORD = process.env['MATRIX_PASSWORD']
 
-const client = {
-  connection,
-  ensureInRoom: async function (roomId) {
-    if (joinedRoomsCache.indexOf(roomId === -1)) {
-      try {
-        const room = await this.connection.joinRoom(roomId);
-        if (room) {
-          joinedRoomsCache.push(room.roomId);
-        }
-      } catch (ex) {
-        console.warn(`Could not join room ${roomId} - ${ex}`);
-      }
-    }
-  },
-  init: async function () {
-    // Init Matrix client
-    const client = sdk.createClient(process.env['MATRIX_HOMESERVER_URL']);
 
-    await client.login("m.login.password", { "user": process.env['MATRIX_USER'], "password": process.env['MATRIX_PASSWORD'] })
+class MatrixClient {
 
+  private homeserver: string
+  private user: string
+  private password: string
+  private connection: matrix.MatrixClient
+
+  constructor(user: string, password: string, homeserver: string) {
+    this.user = user
+    this.password = password
+    this.homeserver = homeserver
+  }
+
+  async login() {
+    const client = matrix.createClient(this.homeserver);
+
+    await client.login("m.login.password", { "user": this.user, "password": this.password })
     const token = client.getAccessToken()
 
-    this.connection = sdk.createClient({
-      baseUrl: process.env['MATRIX_HOMESERVER_URL'],
+    this.connection = matrix.createClient({
+      baseUrl: this.homeserver,
       accessToken: token,
-      userId: process.env['MATRIX_USER']
-      // roomConfigs
+      userId: this.user
     })
+  }
 
-
-    // Ensure in right rooms
+  async joinAllRooms() {
     const rooms = await this.connection.getJoinedRooms();
-    const joinedRooms = rooms.joined_rooms;
+    console.log(rooms)
     const roomConfigs = process.env.MATRIX_ROOMS.split('|');
     roomConfigs.forEach(async (roomConfig) => {
       const room = roomConfig.split('/');
-      if (joinedRooms.indexOf(room[1]) === -1) {
-        await this.ensureInRoom(room[1]);
+      if (rooms.indexOf(room[1]) === -1) {
+        await this.joinRoom(room[1]);
       }
     });
-  },
-  sendAlert: async function (roomId, alert) {
-    // await this.ensureInRoom(roomId);
+  }
+
+  async joinRoom(roomId: string) {
+    try {
+      const room = await this.connection.joinRoom(roomId);
+    } catch (ex) {
+      console.warn(`Could not join room ${roomId} - ${ex}`);
+    }
+  }
+
+  async sendMessage(roomId: string, alert: any) {
     return this.connection.sendEvent(
       roomId,
       'm.room.message',
@@ -58,8 +64,8 @@ const client = {
       },
       ''
     );
-  },
-};
+  }
+}
 
-
+const client = new MatrixClient(MATRIX_USER, MATRIX_PASSWORD, MATRIX_SERVER)
 export default client

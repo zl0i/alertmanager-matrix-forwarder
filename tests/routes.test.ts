@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
 import chai from 'chai';
 import sinon from 'sinon';
-const client = require('../src/client').default;
+import client from '../src/client';
 import fixtures from './fixtures';
-import * as routes from '../src/routes';
 import * as utils from '../src/utils';
 import AlertService from '../src/service';
 
@@ -13,7 +12,7 @@ require('dotenv').config({ path: '.env.default' });
 describe('service', function () {
 
   describe('sendAlerts', function () {
-    const clientStub = sinon.stub(client, 'sendAlert').returns(true);
+    const clientStub = sinon.stub(client, "sendMessage").resolves()
     const req = {
       body: fixtures.alerts,
       query: {
