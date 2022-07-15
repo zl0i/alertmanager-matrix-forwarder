@@ -1,5 +1,4 @@
-FROM node:16.13.2-alpine
-ENV APP_PORT="3000"
+FROM node:16.13.2-alpine as builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
