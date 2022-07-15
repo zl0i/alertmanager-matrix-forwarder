@@ -2,11 +2,15 @@ include:
   - project: 'zl0i/gitlab-ci-template'
     ref: main
     file: 'build.template.yaml'
+  - project: 'zl0i/gitlab-ci-template'
+    ref: main
+    file: 'release.template.yaml'
   - template: Code-Quality.gitlab-ci.yml
 
 stages:
   - test
   - build
+  - release
 
 code_quality:
   rules:
