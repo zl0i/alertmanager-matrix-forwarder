@@ -17,7 +17,7 @@ export default class AlertService {
         }
 
         try {
-            const promises = alerts.map((alert) => client.sendAlert(roomId, alert));
+            const promises = alerts.map((alert) => client.sendMessage(roomId, alert));
             await Promise.all(promises);
             return { result: 'ok' };
         } catch (e) {
