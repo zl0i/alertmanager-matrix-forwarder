@@ -2,9 +2,6 @@ import express from 'express'
 import client from './client'
 import router from './routes'
 
-require('dotenv').config()
-
-
 const app = express()
 app.use(express.json({ limit: 1048576 }))
 
@@ -14,9 +11,10 @@ app.use('/', router)
 
 client
     .login()
-    .then(() => {
+    .then(async () => {
+        await client.joinAllRooms()
         // eslint-disable-next-line no-console
-        console.log('matrix-alertmanager initialized and ready')
+        console.log('alertmanager-matrix-forwarder initialized and ready')
         app.listen(process.env.APP_PORT, () => {
             // eslint-disable-next-line no-console
             console.log(`Server listening on ${process.env.APP_PORT} port`)
@@ -27,6 +25,7 @@ client
         console.error('initialization failed')
         // eslint-disable-next-line no-console
         console.error(e)
+        process.exit(1)
     })
 
 export default app

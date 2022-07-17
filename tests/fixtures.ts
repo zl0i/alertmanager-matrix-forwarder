@@ -1,6 +1,6 @@
 export default {
     alerts: {
-        "receiver": "receiver1",
+        "receiver": "matrix",
         "status": "firing",
         "alerts": [{
             "status": "firing",

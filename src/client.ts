@@ -33,12 +33,11 @@ class MatrixClient {
   }
 
   async joinAllRooms() {
-    const rooms = await this.connection.getJoinedRooms();
-    console.log(rooms)
+    const rooms: any = await this.connection.getJoinedRooms();
     const roomConfigs = process.env.MATRIX_ROOMS.split('|');
     roomConfigs.forEach(async (roomConfig) => {
       const room = roomConfig.split('/');
-      if (rooms.indexOf(room[1]) === -1) {
+      if (rooms.joined_rooms.indexOf(room[1]) === -1) {
         await this.joinRoom(room[1]);
       }
     });

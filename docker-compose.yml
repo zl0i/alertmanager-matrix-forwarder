@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  alertmanager-matrix-forwarder:
+    image: node:16.13.2-alpine
+    container_name: forwarder
+    working_dir: /app
+    entrypoint: npm run dev
+    env_file: .env.default
+    volumes:
+      - ./:/app
+    ports:
+      - 3000:3000
+
+networks:
+  default:
+    name: matrix_default
+    external: true
