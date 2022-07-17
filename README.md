@@ -1,4 +1,5 @@
 [![](https://img.shields.io/docker/pulls/zl0i/alertmanager-matrix-forwarder.svg)](https://hub.docker.com/r/zl0i/alertmanager-matrix-forwarder)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/zloi-space)](https://artifacthub.io/packages/helm/zloi-space/alertmanager-matrix-forwarder)
 
 # Matrix-Alertmanager
 
@@ -14,6 +15,7 @@ Main features:
 - Secret key authentication with Alertmanager.
 - HTML formatted messages.
 - Optionally mentions `@room` on firing alerts
+- Prometheus metrixs
 
 ## How to use
 
@@ -24,7 +26,7 @@ via environment variables.
 
 ### Docker
 
-The [Docker image](https://hub.docker.com/r/zl0i/alertmanager-matrix-forwarder) `zl0i/matrix-alertmanager:v1.0.0` is the easiest way to get the service running. Ensure you set the required environment variables listed in `.env.default` in this repository.
+The [Docker image](https://hub.docker.com/r/zl0i/alertmanager-matrix-forwarder) `zl0i/alertmanager-matrix-forwarder:v1.0.0` is the easiest way to get the service running. Ensure you set the required environment variables listed in `.env.default` in this repository.
 
 ### Alertmanager
 
