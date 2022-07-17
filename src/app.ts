@@ -11,9 +11,10 @@ app.use('/', router)
 
 client
     .login()
-    .then(() => {
+    .then(async () => {
+        await client.joinAllRooms()
         // eslint-disable-next-line no-console
-        console.log('matrix-alertmanager initialized and ready')
+        console.log('alertmanager-matrix-forwarder initialized and ready')
         app.listen(process.env.APP_PORT, () => {
             // eslint-disable-next-line no-console
             console.log(`Server listening on ${process.env.APP_PORT} port`)
