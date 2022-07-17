@@ -4,7 +4,7 @@
   "description": "Prometheus Alertmanager bot for Matrix",
   "main": "src/app.js",
   "scripts": {
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon --legacy-watch --watch \"./**\" --ext \"ts,json\" --ignore \"./**/*.spec.ts\" --exec \"npx ts-node src/app.ts\"",
     "test": "mocha tests/ --require ts-node/register tests/*.test.ts",
     "build": "tsc",
     "start": "node src/app.js"
