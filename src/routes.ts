@@ -8,7 +8,7 @@ router.get('/', (_req, res) => {
   res.send('Hey 👋');
 })
 
-router.get('/metrics', metrics.controller)
+router.get('/metrics', metrics.controller())
 
 router.post('/alerts', async (req, res) => {
   const secret = req.query.secret;

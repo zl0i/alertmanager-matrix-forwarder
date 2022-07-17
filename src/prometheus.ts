@@ -24,11 +24,12 @@ class Metrics {
         })
     }
 
-    controller = async (_req: express.Request, res: express.Response) => {
-        res.setHeader('Content-Type', this.register.contentType)
-        res.end(await this.register.metrics())
+    controller() {
+        return async (_req: express.Request, res: express.Response) => {
+            res.setHeader('Content-Type', this.register.contentType)
+            res.end(await this.register.metrics())
+        }
     }
-
 }
 
 const metrics = new Metrics()
