@@ -1,16 +1,13 @@
 FROM node:16.13.2-alpine as builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+WORKDIR /opt/server/
 COPY . .
+RUN npm ci
 RUN npm run build
 
-
 FROM node:16.13.2-alpine as runner
-ENV NODE_ENV=production
 EXPOSE 3000
-WORKDIR /app
-COPY package*.json ./
-COPY --from=builder /app/dist ./
-RUN npm ci
-CMD npm start
+WORKDIR /opt/server/
+COPY --from=builder /opt/server/package*.json ./
+RUN npm i --prod
+COPY --from=builder /opt/server/build/ ./
+CMD npm run start
