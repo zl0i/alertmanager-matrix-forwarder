@@ -2,9 +2,6 @@ import express from 'express'
 import client from './client'
 import router from './routes'
 
-require('dotenv').config()
-
-
 const app = express()
 app.use(express.json({ limit: 1048576 }))
 
