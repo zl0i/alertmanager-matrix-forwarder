@@ -20,10 +20,7 @@ Main features:
 ### Configuration
 
 Whether running manually or via the Docker image, the configuration is set
-via environment variables. When running manually, copy `.env.default`
-into `.env`, set the values and they will be loaded automatically.
-When using the Docker image, set the environment variables when running
-the container.
+via environment variables. 
 
 ### Docker
 
@@ -68,7 +65,7 @@ Node 16, Express, Matrix JS SDK
 
 Dmitri Popov / https://zloi.space
 
-fork: Jason Robinson / https://jasonrobinson.me / @jaywink:federator.dev
+Fork from: https://github.com/jaywink/matrix-alertmanager
 
 ## License
 
