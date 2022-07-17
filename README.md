@@ -22,11 +22,11 @@ Main features:
 ### Configuration
 
 Whether running manually or via the Docker image, the configuration is set
-via environment variables. 
+via environment variables.
 
 ### Docker
 
-The [Docker image](https://hub.docker.com/r/zl0i/alertmanager-matrix-forwarder) `zl0i/alertmanager-matrix-forwarder:v1.0.0` is the easiest way to get the service running. Ensure you set the required environment variables listed in `.env.default` in this repository.
+The [Docker image](https://hub.docker.com/r/zl0i/alertmanager-matrix-forwarder) `zl0i/alertmanager-matrix-forwarder:latest` is the easiest way to get the service running. Ensure you set the required environment variables listed in `.env.default` in this repository.
 
 ### Alertmanager
 
