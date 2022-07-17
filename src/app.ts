@@ -25,6 +25,7 @@ client
         console.error('initialization failed')
         // eslint-disable-next-line no-console
         console.error(e)
+        process.exit(1)
     })
 
 export default app
