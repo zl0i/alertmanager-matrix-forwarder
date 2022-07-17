@@ -14,7 +14,8 @@ router.post('/alerts', async (req, res) => {
     return;
   }
   try {
-    await AlertService.sendAlers(req.body)
+    const data = await AlertService.sendAlers(req.body)
+    res.json(data)
   } catch (error) {
     res.json({ result: error.message });
   }
